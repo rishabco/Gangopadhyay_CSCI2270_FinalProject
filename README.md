@@ -10,11 +10,13 @@ How to Run
 
 The user will interact with a Main Menu that will have a variety of functions, including:
 
-Add Station
-Delete Station
-Find Station
-Find Path Between Stations
-Print Stations
+-Add Station.
+-Delete Station.
+-Find Station.
+-Find Path Between Stations.
+-Print Stations.
+-Calculate Distance of Travel.
+- 
 
 
 Dependencies
