@@ -38,7 +38,8 @@ void printMenu()
 
 int main()
 {
-vector <string> cities;
+
+    vector <string> cities;
     Travel* tGraph = new Travel;
 
     //Read in file
@@ -118,7 +119,7 @@ vector <string> cities;
     string startCity;
     string destCity;
 
-    while(input != "5")
+     while(input != "5")
     {
         printMenu();
         getline(cin, input);
@@ -154,7 +155,26 @@ vector <string> cities;
         {
 
             plannerMenu();
+            string subInput;
+            getline(cin, subInput);
+            if(subInput == "1")
+            {
 
+                cout << "Please enter a starting city" << endl;
+                getline(cin, startCity);
+                cout << "Please enter a destination" << endl;
+                getline(cin, destCity);
+
+                //tGraph ->calculateTime(startCity, destCity);
+            }
+            if(subInput == "2")
+            {
+                cout << "Please enter a starting city" << endl;
+                getline(cin, startCity);
+                cout << "Please enter a destination" << endl;
+                getline(cin, destCity);
+                //tGraph -> calculateCost(startCity, destCity);
+            }
 
             //Plan Fastest Route
             //Plan Cheapest Route
@@ -170,6 +190,4 @@ vector <string> cities;
         }
     }
 
-
 }
-
