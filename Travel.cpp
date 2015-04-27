@@ -86,7 +86,7 @@ void Travel::addPlanePath(std::string v1, std::string v2, int weight)
     //find indexes
     int v1Index;
     int v2Index;
- 
+
     for(int i=0; i<hubCityVertices.size(); i++)
     {
         if(v1 == hubCityVertices[i].name)
@@ -94,7 +94,7 @@ void Travel::addPlanePath(std::string v1, std::string v2, int weight)
             v1Index=i;
         }
     }
- 
+
     for(int i=0; i<hubCityVertices.size(); i++)
     {
         if(v2 == hubCityVertices[i].name)
@@ -102,10 +102,10 @@ void Travel::addPlanePath(std::string v1, std::string v2, int weight)
             v2Index=i;
         }
     }
- 
+
     hubCityVertices[v1Index].isAirport = true;
     hubCityVertices[v2Index].isAirport = true;
- 
+
         for(int i = 0; i < hubCityVertices.size(); i++)
         {
         //cout << hubCityVertices[i].name << endl;
@@ -127,20 +127,76 @@ void Travel::addPlanePath(std::string v1, std::string v2, int weight)
 }
 
 
+
 void Travel::printPlanePaths()
 {
 
+    for(int i = 0 ; i < hubCityVertices.size(); i++)
+    {
+        if(!hubCityVertices[i].adj.empty())
+        {
+            cout <<hubCityVertices[i].name << "-->";
+            for(int j = 0; j < hubCityVertices[i].adj.size(); j++)
+            {
+                cout << hubCityVertices[i].adj[j].v->name;
+                if(j != hubCityVertices[i].adj.size()-1)
+                {
+                    cout << "---";
+                }
+            }
+            cout << endl;
+        }
+
+    }
 }
 
 void Travel::printDistricts()
 {
 
+    int currentDistrictID = 1;
+    for(int l = 0; l <= numDistricts-2; l++)
+    {
+        cout << "Travel District " << currentDistrictID << ":" << endl;
+        for(int i = 0 ; i < vertices.size(); i++)
+        {
+            if (vertices[i].districtID == currentDistrictID)
+            {
+                cout <<vertices[i].name;
+                cout << endl;
+            }
+        }
+
+        cout << endl;
+        currentDistrictID++;
+    }
+
 }
 
 void Travel::printCities()
 {
+    for(int i = 0 ; i < vertices.size(); i++)
+    {
+        cout <<vertices[i].name << "-->";
+        for(int j = 0; j < vertices[i].adj.size(); j++)
+        {
+            cout << vertices[i].adj[j].v->name;
+            if(j != vertices[i].adj.size()-1)
+            {
+                cout << "---";
+            }
+        }
+        cout << endl;
+    }
+    cout<< endl;
 
+    for(int i= 0; i < hubCityVertices.size(); i++)
+    {
+        if(hubCityVertices[i].isAirport == true)
+        cout << hubCityVertices[i].name << " has an airport." << endl;
+    }
 }
+
+
 
 int Travel::calculateCost(string starting, string destination)
 {
