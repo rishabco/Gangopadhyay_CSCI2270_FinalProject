@@ -49,3 +49,5 @@ class Travel
         int travelDistance;
 
 };
+
+#endif // TRAVEL_H
