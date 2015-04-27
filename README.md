@@ -25,20 +25,20 @@ Dependencies
 
 Here are the libraries that must be included for this program to function
 Main:
-  iostream
-  fstream
-  string
-  vector
-  sstream
-  "Travel.h"
+-  iostream
+- fstream
+-  string
+-  vector
+-  sstream
+-  "Travel.h"
 Travel.h
-  vector
-  iostream
+-  vector
+-  iostream
 Travel.cpp
-  "Travel.h"
-   vector
-   queue
-   climit
+-  "Travel.h"
+-   vector
+-   queue
+-   climit
 
 Standard C++ librarries
 
