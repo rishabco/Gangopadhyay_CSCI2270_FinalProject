@@ -34,8 +34,10 @@ class Travel
         void printCities();
         void printPlanePaths();
         vertex* findNearestAirport(std::string city);
-        void shortestDistance(std::string starting, std::string destination);
+        int travelBetweenDistricts(std::string starting, std::string destination);
+        int shortestDistance(std::string starting, std::string destination);
         void findDistricts();
+
 
     protected:
     private:
@@ -45,10 +47,5 @@ class Travel
         bool districtIsSet;
         int numDistricts;
         int travelDistance;
-        int planeSpeed = 600;
-        int carSpeed = 60;
 
 };
-
-
-#endif // TRAVEL_H
