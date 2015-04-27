@@ -7,6 +7,7 @@ using namespace std;
 
 Travel::Travel()
 {
+	//ctor
 	 districtIsSet = false;
 }
 
@@ -121,6 +122,7 @@ void Travel::addPlanePath(std::string v1, std::string v2, int weight)
                 }
             }
         }
+        int k = 0;
     }
 }
 
