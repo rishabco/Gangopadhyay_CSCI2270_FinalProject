@@ -118,6 +118,58 @@ vector <string> cities;
     string startCity;
     string destCity;
 
+    while(input != "5")
+    {
+        printMenu();
+        getline(cin, input);
+
+        //Print Cities
+        if(input=="1"){
+            cout << "These are the cities currently available:" << endl << endl;
+            tGraph->printCities();
+            cout << endl;
+
+        }
+        //Ground Travel Options
+        else if(input=="2")
+        {
+            cout << endl;
+            cout << "You can travel on ground within each Travel District. ";
+            cout << "Here are all Ground Travel Districts in your Network: " << endl;
+            tGraph->printDistricts();
+            cout << endl;
+        }
+        //Air Travel Options
+        else if(input=="3")
+        {
+            cout << endl;
+            cout << "You can travel between districts via Plane. ";
+            cout << "Here are all airports in your District" << endl;
+            tGraph->printPlanePaths();
+            cout << endl;
+
+        }
+        //Plan Trip
+        else if(input=="4")
+        {
+
+            plannerMenu();
+
+
+            //Plan Fastest Route
+            //Plan Cheapest Route
+
+        }
+        else if(input =="5")
+        {
+            cout << "Thank you, enjoy your trip!" << endl;
+        }
+        else
+        {
+            cout << "Invalid Input" <<endl;
+        }
+    }
+
 
 }
 
