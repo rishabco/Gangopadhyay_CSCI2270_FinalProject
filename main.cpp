@@ -38,6 +38,85 @@ void printMenu()
 
 int main()
 {
+vector <string> cities;
+    Travel* tGraph = new Travel;
+
+    //Read in file
+    //string fileName = argc[1];
+    string fileName = "cities.txt";
+    ifstream fn;
+    fn.open(fileName);
+    if (!fn)
+    {
+        cout << "Could not open file\n";
+    }
+
+
+    //read in the thing to the vector
+    string line;
+    int lineCount = 0;
+
+    while(getline(fn, line))
+    {
+        stringstream ss(line);
+        vector <string> data;
+        int vectIndex = 0;
+
+
+        while(ss.good())
+        {
+            string info;
+            getline(ss, info, ',');
+            data.push_back(info);
+            vectIndex++;
+
+        }
+            //Read in first line.
+            if(lineCount == 0)
+            {
+                cities = data;
+                for(int i  = 1; i < cities.size(); i++)
+                {
+
+                    tGraph->addCity(cities[i]);
+                    tGraph->addHub(cities[i]);
+                }
+
+            }
+            else
+            {
+                string currentCity = data[0];
+                for(int i = 1; i < cities.size(); i++)
+                {
+                    if(stoi(data[i]) != -1)
+                    {
+                        if(stoi(data[i])<=1000)
+                        {
+                            tGraph->addRoad(currentCity, cities[i], stoi(data[i]));
+                        }
+                        else
+                        {
+                            //tGraph->addHub(currentCity);
+                            tGraph->addPlanePath(currentCity, cities[i], stoi(data[i]));
+                        }
+
+                    }
+
+                }
+
+            }
+            lineCount++;
+        }
+
+    fn.close();
+
+    tGraph->findDistricts();
+
+    string input;
+    welcomeMenu();
+
+    string startCity;
+    string destCity;
 
 
 }
