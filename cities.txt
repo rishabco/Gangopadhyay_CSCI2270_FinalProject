@@ -1,0 +1,13 @@
+cities,San Francisco,New York,Denver,Portland,Sunnyvale,Santa Cruz,Boston,Washington DC,Philadelphia,Phoenix,Santa Fe,Boulder
+San Francisco,0,2906,1250,636,40,73,-1,-1,-1,-1,-1,-1
+New York,2906,0,1778,-1,-1,-1,215,226,-1,-1,-1,-1
+Denver,1250,1778,0,-1,-1,-1,-1,-1,-1,-1,393,29
+Portland,636,-1,-1,0,-1,-1,-1,-1,-1,-1,-1,-1
+Sunnyvale,40,-1,-1,-1,0,35,-1,-1,-1,-1,-1,-1
+Santa Cruz,73,-1,-1,-1,35,0,-1,-1,-1,-1,-1,-1
+Boston,-1,-1,215,-1,-1,-1,0,438,309,-1,-1,-1
+Washington DC,-1,226,-1,-1,-1,-1,438,0,139,-1,-1,-1
+Philadelphia,-1,-1,-1,-1,-1,-1,309,139,0,-1,-1,-1
+Phoenix,-1,-1,-1,-1,-1,-1,-1,-1,-1,0,480,-1
+Santa Fe,-1,-1,393,-1,-1,-1,-1,-1,-1,480,0,420
+Boulder,-1,-1,29,-1,-1,-1,-1,-1,-1,-1,420,0
