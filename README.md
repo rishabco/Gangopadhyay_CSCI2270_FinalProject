@@ -23,6 +23,23 @@ A menu is then displayed with the following options:
 
 Dependencies
 
+Here are the libraries that must be included for this program to function
+Main:
+  iostream
+  fstream
+  string
+  vector
+  sstream
+  "Travel.h"
+Travel.h
+  vector
+  iostream
+Travel.cpp
+  "Travel.h"
+   vector
+   queue
+   climit
+
 Standard C++ librarries
 
 Rishab Gangopadhyay, Francesca Figueroa, Kevin Prabhu
