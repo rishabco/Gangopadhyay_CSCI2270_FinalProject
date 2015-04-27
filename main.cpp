@@ -154,30 +154,22 @@ int main()
         else if(input=="4")
         {
 
-            plannerMenu();
-            string subInput;
-            getline(cin, subInput);
-            if(subInput == "1")
-            {
 
                 cout << "Please enter a starting city" << endl;
                 getline(cin, startCity);
                 cout << "Please enter a destination" << endl;
                 getline(cin, destCity);
 
-                //tGraph ->calculateTime(startCity, destCity);
-            }
-            if(subInput == "2")
-            {
-                cout << "Please enter a starting city" << endl;
-                getline(cin, startCity);
-                cout << "Please enter a destination" << endl;
-                getline(cin, destCity);
-                //tGraph -> calculateCost(startCity, destCity);
-            }
+                cout << endl;
+                cout << "Travel Summary" << endl;
+                cout << "------------------------------" << endl;
+                int distanceTraveled = tGraph->shortestDistance(startCity, destCity);
 
-            //Plan Fastest Route
-            //Plan Cheapest Route
+                cout << "The total distance of your trip is: ";
+                cout <<  distanceTraveled << " miles." << endl;
+                cout << "------------------------------" << endl<<endl;
+
+
 
         }
         else if(input =="5")
@@ -188,6 +180,9 @@ int main()
         {
             cout << "Invalid Input" <<endl;
         }
+
+
     }
+
 
 }
