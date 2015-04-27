@@ -1,4 +1,3 @@
-
 #include "Travel.h"
 #include <vector>
 #include <queue>
@@ -126,8 +125,6 @@ void Travel::addPlanePath(std::string v1, std::string v2, int weight)
     }
 }
 
-
-
 void Travel::printPlanePaths()
 {
 
@@ -196,26 +193,303 @@ void Travel::printCities()
     }
 }
 
-
-
-int Travel::calculateCost(string starting, string destination)
+int Travel::shortestDistance(std::string starting, std::string destination)
 {
+    int totalDistance = 0;
+    bool startFound = false;
+    bool destFound = false;
+    for(int i = 0; i < vertices.size(); i++)
+    {
+        if(starting == vertices[i].name)
+        {
+            startFound = true;
+        }
+    }
+
+    for(int i = 0; i < vertices.size(); i++)
+    {
+        if(destination == vertices[i].name)
+        {
+            destFound = true;
+        }
+    }
+
+    if(destFound == false || startFound == false)
+    {
+        cout << "One or more cities not in network" << endl;
+        return 0;
+    }
+
+
+    vertex* start;
+    vertex* dest;
+
+    vector <vertex*> solved;
+
+    for(int i = 0; i < vertices.size(); i++)
+    {
+        vertices[i].visited = false;
+        vertices[i].previous = NULL;
+        vertices[i].distance= INT_MAX;
+        if (vertices[i].name == starting)
+        {
+            vertices[i].visited = true;
+            vertices[i].distance = 0;
+            start = &vertices[i];
+        }
+        else if(vertices[i].name == destination)
+        {
+            dest = &vertices[i];
+        }
+    }
+
+
+
+    //Different Districts
+    //If in different districts: Find the district the other city is in;
+    if(dest->districtID != start->districtID)
+    {
+
+        vertex* startingAirport = findNearestAirport(starting);
+        vertex* destinationAirport = findNearestAirport(destination);
+
+        //Travel from starting city to final city
+        //Do shortest distance from starting to airport, airport to airport, airport to destination
+        totalDistance = totalDistance + shortestDistance(starting, startingAirport->name);
+        totalDistance = totalDistance + travelBetweenDistricts(startingAirport->name, destinationAirport->name);
+        totalDistance = totalDistance + shortestDistance(destinationAirport->name, destination);
+        //Find where Other thing is
+        return totalDistance;
+    }
+
+
+    solved.push_back(start);
+    int minDistance;
+
+
+    while(dest->visited == false)
+    {
+        minDistance = INT_MAX;
+        int distance = 0;
+        vertex* minVert = NULL;
+        vertex* minPrevious;
+
+        for(int j = 0; j < solved.size(); j++)
+        {
+            solved[j]->visited = true;
+
+            for( int l = 0; l < solved[j]->adj.size(); l++)
+            {
+                if(solved[j]->adj[l].v->visited == false)
+                {
+                    distance = solved[j]->distance + solved[j]->adj[l].weight;
+                    if(distance < minDistance)
+                    {
+                        solved[j]->adj[l].v->distance = distance;
+
+                        minDistance = distance;
+                        minVert = solved[j]->adj[l].v;
+                        minPrevious = solved[j];
+                    }
+                }
+            }
+        }
+
+        minVert->previous = minPrevious;
+        solved.push_back(minVert);
+
+    }
+
+    vector <string> path;
+    vertex* x = dest;
+
+    while(x != NULL)
+    {
+        path.push_back(x->name);
+        x = x->previous;
+    }
+
+    cout << "Drive from: ";
+
+    cout << path[path.size()-1];
+    for (int i = path.size()-2; i > -1; i--)
+    {
+        cout << " to " << path[i];
+    }
+
+    cout << endl;
+
+    return minDistance;
 
 }
 
-int Travel::calculateTime(string starting, string destination)
+void Travel::findDistricts()
 {
-//    cout << travelDistance << endl;
+    districtIsSet = true;
+    int districtCounter = 1;
+    for(int j = 0; j < vertices.size(); j++)
+    {
+        //cout << districtCounter<<endl;
+        if(vertices[j].districtID == 0)
+        {
+
+            queue<vertex*> bfq;
+            vertex v;
+            int i = 0;
+            for(i=0; i<vertices.size();i++)
+                {
+                if (vertices[j].name == vertices[i].name)
+                {
+                    v = vertices[i];
+                    break;
+                }
+            }
+            //cout<<v.name<<endl;
+            vertices[i].visited = true;
+            vertices[i].districtID = districtCounter;
+            bfq.push(&vertices[i]);
+
+            while (!bfq.empty())
+            {
+                v = *bfq.front();
+                bfq.pop();
+                for(i=0;i<v.adj.size();i++) {
+                    if (v.adj[i].v->visited==false)
+                    {
+                        v.adj[i].v->visited = true;
+                        v.adj[i].v->districtID = districtCounter;
+                        bfq.push(v.adj[i].v);
+                        //cout<<v.adj[i].v->name<<endl;
+                    }
+                }
+            }
+
+        }
+
+        if(vertices[j+1].districtID == 0)
+        {
+            districtCounter++;
+        }
+
+    }
+    numDistricts = districtCounter;
+
 }
 
-void Travel::shortestDistance(std::string starting, std::string destination)
+vertex* Travel::findNearestAirport(std::string startingCity)
 {
+    vertex* airportCity;
 
+
+    int startIndex;
+    //Find district ID of city
+    for(int i =0; i < vertices.size();i++)
+    {
+        if(startingCity == vertices[i].name)
+        {
+            startIndex = i;
+        }
+    }
+
+    int cityDistrict = vertices[startIndex].districtID;
+    //Search through all cities in district
+        for(int i = 0 ; i < vertices.size(); i++)
+        {
+            if (vertices[i].districtID == cityDistrict)
+            {
+
+                if(vertices[i].isAirport == true)
+                {
+                    airportCity = &vertices[i];
+                    return airportCity;
+                }
+            }
+        }
+
+    return NULL;
 }
 
-void Travel::findDistricts() //Based on isAirport BOOl
+int Travel::travelBetweenDistricts(std::string starting, std::string destination)
 {
+    vertex* start;
+    vertex* dest;
+
+    vector <vertex*> solved;
+
+    for(int i = 0; i < hubCityVertices.size(); i++)
+    {
+        hubCityVertices[i].visited = false;
+        hubCityVertices[i].previous = NULL;
+        hubCityVertices[i].distance= INT_MAX;
+        if (hubCityVertices[i].name == starting)
+        {
+            hubCityVertices[i].visited = true;
+            hubCityVertices[i].distance = 0;
+            start = &hubCityVertices[i];
+        }
+        else if(hubCityVertices[i].name == destination)
+        {
+            dest = &hubCityVertices[i];
+        }
+    }
 
 
+    solved.push_back(start);
+    int minDistance;
+
+
+    while(dest->visited == false)
+    {
+        minDistance = INT_MAX;
+        int distance = 0;
+        vertex* minVert = NULL;
+        vertex* minPrevious;
+
+        for(int j = 0; j < solved.size(); j++)
+        {
+            solved[j]->visited = true;
+
+            for( int l = 0; l < solved[j]->adj.size(); l++)
+            {
+                if(solved[j]->adj[l].v->visited == false)
+                {
+                    distance = solved[j]->distance + solved[j]->adj[l].weight;
+                    if(distance < minDistance)
+                    {
+                        solved[j]->adj[l].v->distance = distance;
+
+                        minDistance = distance;
+                        minVert = solved[j]->adj[l].v;
+                        minPrevious = solved[j];
+                    }
+                }
+            }
+        }
+
+        minVert->previous = minPrevious;
+        solved.push_back(minVert);
+
+    }
+    vector <string> path;
+    vertex* x = dest;
+
+    while(x != NULL)
+    {
+        path.push_back(x->name);
+        x = x->previous;
+    }
+
+    travelDistance = minDistance;
+
+    cout << "Fly from: ";
+
+    cout << path[path.size()-1];
+    for (int i = path.size()-2; i > -1; i--)
+    {
+        cout << " to " << path[i];
+    }
+
+    cout << endl;
+
+    return minDistance;
 }
-
