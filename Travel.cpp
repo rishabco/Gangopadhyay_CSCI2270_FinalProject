@@ -7,7 +7,7 @@ using namespace std;
 
 Travel::Travel()
 {
-	 districtIsSet == false;
+	 districtIsSet = false;
 }
 
 Travel::~Travel()
