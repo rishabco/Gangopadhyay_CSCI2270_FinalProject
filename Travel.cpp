@@ -3,27 +3,84 @@
 #include <queue>
 #include <climits>
 using namespace std;
- 
+
 Travel::Travel()
 {
+    //initializes that the districts are not already set
     districtIsSet == false;
 }
- 
+
 Travel::~Travel()
 {
     //dtor
 }
- 
-void Travel::addRoad(std::string cityOne, std::string cityTwo, int distance)
+
+void Travel::addCity(std::string cityName)
+//Creates vertices in the vertices vector
 {
+    bool found = false;
+
+    //Checks to see if the city is already in the vector.
+    for(int i = 0; i < vertices.size(); i++)
+    {
+        if(vertices[i].name == cityName)
+        {
+            //Sets to true, so vertex is not duplicated
+            found = true;
+        }
+    }
+    if(found == false)
+    {
+        //Creates a new vertex for the city
+        vertex v;
+        v.name = cityName;
+        v.districtID = 0;
+        //Adds to the vertices vector
+        vertices.push_back(v);
+    }
+
+}
+
+void Travel::addHub(std::string cityName)
+//Creates vertices in the hubCityVertices vector
+{
+    bool found = false;
+
+    //Checks to see if the city is already in the vector.
+    for(int i = 0; i < hubCityVertices.size(); i++)
+    {
+        if(hubCityVertices[i].name == cityName)
+        {
+            //Sets to true, so vertex is not duplicated.
+            found = true;
+        }
+    }
+    if(found == false)
+    {
+        //Creates a new vertex for the city
+        vertex v;
+        v.name = cityName;
+        v.districtID = 0;
+        //Adds to the hubCityVertices vector
+        hubCityVertices.push_back(v);
+    }
+
+}
+
+void Travel::addRoad(std::string cityOne, std::string cityTwo, int distance)
+//Adds a "road" path between cities
+{
+    //Loops through vertices vector
     for(int i = 0; i < vertices.size(); i++)
     {
         if(vertices[i].name == cityOne)
         {
+            //Loops through "cityOne" adjacency vector
             for(int j = 0; j < vertices.size(); j++)
             {
                 if(vertices[j].name == cityTwo && i != j)
                 {
+                    //Adds a new vertex to the "cityOne" adjacency vector
                     adjVertex av;
                     av.v = &vertices[j];
                     av.weight = distance;
@@ -33,55 +90,15 @@ void Travel::addRoad(std::string cityOne, std::string cityTwo, int distance)
         }
     }
 }
- 
-void Travel::addCity(std::string cityName)
-{
-    bool found = false;
-    //Checks to see if the city is already in the vector.
-    for(int i = 0; i < vertices.size(); i++)
-    {
-        if(vertices[i].name == cityName)
-        {
-            found = true;
-        }
-    }
-    if(found == false)
-    {
-        vertex v;
-        v.name = cityName;
-        v.districtID = 0;
-        vertices.push_back(v);
-    }
- 
-}
- 
-void Travel::addHub(std::string cityName)  //GET RID OF THIS ONE?
-{
-    bool found = false;
-    for(int i = 0; i < hubCityVertices.size(); i++)
-    {
-        if(hubCityVertices[i].name == cityName)
-        {
-            found = true;
-        }
-    }
-    if(found == false)
-    {
-        vertex v;
-        v.name = cityName;
-        v.districtID = 0;
-        hubCityVertices.push_back(v);
-    }
- 
-}
- 
+
 void Travel::addPlanePath(std::string cityOne, std::string cityTwo, int distance)
+//Adds a path between "hub" cities
 {
-    //SET cityOne, cityTwo AS PLANE PATHS
-    //find indexes
+
     int cityOneIndex;
     int cityTwoIndex;
- 
+
+    //Find Index of cityOne
     for(int i = 0; i < vertices.size(); i++)
     {
         if(cityOne == vertices[i].name)
@@ -89,7 +106,8 @@ void Travel::addPlanePath(std::string cityOne, std::string cityTwo, int distance
             cityOneIndex=i;
         }
     }
- 
+
+    //Find Index of cityTwo
     for(int i = 0; i < vertices.size(); i++)
     {
         if(cityTwo ==  vertices[i].name)
@@ -97,18 +115,22 @@ void Travel::addPlanePath(std::string cityOne, std::string cityTwo, int distance
             cityTwoIndex=i;
         }
     }
- 
+
+    //Distinguishes these cities as "hub" cities
     vertices[cityOneIndex].isAirport = true;
     vertices[cityTwoIndex].isAirport = true;
- 
+
+    //Loops through hubCityVertices
     for(int i = 0; i < hubCityVertices.size(); i++)
     {
         if(hubCityVertices[i].name == cityOne)
         {
+            //Loops through cityOne adjacency vector
             for(int j = 0; j < hubCityVertices.size(); j++)
             {
                 if(hubCityVertices[j].name == cityTwo && i != j)
                 {
+                    //Adds new city to cityOne adjacency vector
                     adjVertex av;
                     av.v = &hubCityVertices[j];
                     av.weight = distance;
@@ -118,52 +140,61 @@ void Travel::addPlanePath(std::string cityOne, std::string cityTwo, int distance
         }
     }
 }
- 
-void Travel::printPlanePaths()
+
+void Travel::findDistricts()
+//Sets the districts based on the isAirport Boolean
 {
- 
-    for(int i = 0 ; i < hubCityVertices.size(); i++)
+    districtIsSet = true;
+    int districtCounter = 1;
+    for(int j = 0; j < vertices.size(); j++)
     {
-        if(!hubCityVertices[i].adj.empty())
+        if(vertices[j].districtID == 0)
         {
-            cout << hubCityVertices[i].name << "-->";
-            for(int j = 0; j < hubCityVertices[i].adj.size(); j++)
-            {
-                cout << hubCityVertices[i].adj[j].v->name;
-                if(j != hubCityVertices[i].adj.size() - 1)
+
+            queue <vertex*> districtQueue;
+            vertex v;
+            int i = 0;
+            for(i=0; i<vertices.size();i++)
                 {
-                    cout << "---";
+                if (vertices[j].name == vertices[i].name)
+                {
+                    v = vertices[i];
+                    break;
                 }
             }
-            cout << endl;
-        }
- 
-    }
-}
- 
-void Travel::printDistricts()
-{
- 
-    int currentDistrictID = 1;
-    for(int l = 0; l <= numDistricts-2; l++)
-    {
-        cout << "Travel District " << currentDistrictID << ":" << endl;
-        for(int i = 0 ; i < vertices.size(); i++)
-        {
-            if (vertices[i].districtID == currentDistrictID)
+            vertices[i].visited = true;
+            vertices[i].districtID = districtCounter;
+            districtQueue.push(&vertices[i]);
+
+            while (!districtQueue.empty())
             {
-                cout << vertices[i].name;
-                cout << endl;
+                v = *districtQueue.front();
+                districtQueue.pop();
+                for(i=0;i<v.adj.size();i++)
+                {
+                    if (v.adj[i].v->visited==false)
+                    {
+                        v.adj[i].v->visited = true;
+                        v.adj[i].v->districtID = districtCounter;
+                        districtQueue.push(v.adj[i].v);
+                    }
+                }
             }
+
         }
- 
-        cout << endl;
-        currentDistrictID++;
+
+        if(vertices[j+1].districtID == 0)
+        {
+            districtCounter++;
+        }
+
     }
- 
+    numDistricts = districtCounter;
+
 }
- 
+
 void Travel::printCities()
+//Prints out all cities and paths between
 {
     for(int i = 0 ; i < vertices.size(); i++)
     {
@@ -180,35 +211,92 @@ void Travel::printCities()
     }
     cout<< endl;
 }
- 
+
+void Travel::printDistricts()
+//Prints out all cities in each district
+{
+
+    int currentDistrictID = 1;
+    //Loops through all district numbers
+    for(int l = 0; l <= numDistricts-2; l++)
+    {
+        cout << "Travel District " << currentDistrictID << ":" << endl;
+        //Loops through vertices vector
+        for(int i = 0 ; i < vertices.size(); i++)
+        {
+            //If the district of the vertex is the same as districtID -> prints vertex name
+            if (vertices[i].districtID == currentDistrictID)
+            {
+                cout << vertices[i].name;
+                cout << endl;
+            }
+        }
+
+        cout << endl;
+        //Move to next district
+        currentDistrictID++;
+    }
+
+}
+
+void Travel::printPlanePaths()
+//Prints out paths between "hub" cities
+{
+
+    for(int i = 0 ; i < hubCityVertices.size(); i++)
+    {
+        if(!hubCityVertices[i].adj.empty())
+        {
+            cout << hubCityVertices[i].name << "-->";
+            for(int j = 0; j < hubCityVertices[i].adj.size(); j++)
+            {
+                cout << hubCityVertices[i].adj[j].v->name;
+                if(j != hubCityVertices[i].adj.size() - 1)
+                {
+                    cout << "---";
+                }
+            }
+            cout << endl;
+        }
+
+    }
+}
+
 vertex* Travel::findNearestAirport(string startingCity)
+//Finds the airport in a district
 {
     vertex* airportCity;
- 
- 
+
     int startIndex;
     //Find district ID of city
+
+    //Search through all vertices
     for(int i =0; i < vertices.size();i++)
-    {
+    {   //Check if it is the starting city
         if(startingCity == vertices[i].name)
         {
             if(vertices[i].isAirport == true)
-            {
+            {   //If the starting city is an airport return that index
                 return &vertices[i];
             }
+            //Else return the start index
             startIndex = i;
         }
     }
- 
+
+    //This is the district of the city you must search through
     int cityDistrict = vertices[startIndex].districtID;
-    //Search through all cities in district
+
+    //Search through vertices vector
     for(int i = 0 ; i < vertices.size(); i++)
     {
+        //If you find a vertex with the same district
         if (vertices[i].districtID == cityDistrict)
         {
-
+            //And if the vertex is an airport
             if(vertices[i].isAirport == true)
             {
+                //Return that city as the "airport city"
                 airportCity = &vertices[i];
                 return airportCity;
             }
@@ -217,98 +305,16 @@ vertex* Travel::findNearestAirport(string startingCity)
 
     return NULL;
 }
- 
-int Travel::travelBetweenDistricts(string starting, string destination)
-{
-    vertex* start;
-    vertex* dest;
- 
-    vector <vertex*> peth;
- 
-    for(int i = 0; i < hubCityVertices.size(); i++)
-    {
-        hubCityVertices[i].visited = false;
-        hubCityVertices[i].previous = NULL;
-        hubCityVertices[i].distance= INT_MAX;
-        if (hubCityVertices[i].name == starting)
-        {
-            hubCityVertices[i].visited = true;
-            hubCityVertices[i].distance = 0;
-            start = &hubCityVertices[i];
-        }
-        else if(hubCityVertices[i].name == destination)
-        {
-            dest = &hubCityVertices[i];
-        }
-    }
- 
- 
-    peth.push_back(start);
-    int minDistance;
- 
- 
-    while(dest->visited == false)
-    {
-        minDistance = INT_MAX;
-        int distance = 0;
-        vertex* minVert = NULL;
-        vertex* minPrevious;
- 
-        for(int j = 0; j < peth.size(); j++)
-        {
-            peth[j]->visited = true;
- 
-            for( int l = 0; l < peth[j]->adj.size(); l++)
-            {
-                if(peth[j]->adj[l].v->visited == false)
-                {
-                    distance = peth[j]->distance + peth[j]->adj[l].weight;
-                    if(distance < minDistance)
-                    {
-                        peth[j]->adj[l].v->distance = distance;
- 
-                        minDistance = distance;
-                        minVert = peth[j]->adj[l].v;
-                        minPrevious = peth[j];
-                    }
-                }
-            }
-        }
- 
-        minVert->previous = minPrevious;
-        peth.push_back(minVert);
- 
-    }
-    vector <string> path;
-    vertex* destiNation = dest;
- 
-    while(x != NULL)
-    {
-        path.push_back(x->name);
-        destiNation = destiNation->previous;
-    }
- 
-    travelDistance = minDistance;
- 
-    cout << "Fly from: ";
- 
-    cout << path[path.size()-1];
-    for (int i = path.size()-2; i > -1; i--)
-    {
-        cout << " to " << path[i];
-    }
- 
-    cout << endl;
- 
-    return minDistance;
- 
-}
- 
+
 int Travel::shortestDistance(std::string starting, std::string destination)
 {
+    //Djikstra's Algorithm w/Modifications
+
+    //Makes sure both cities are in the graph
     int totalDistance = 0;
     bool startFound = false;
     bool destFound = false;
+
     for(int i = 0; i < vertices.size(); i++)
     {
         if(starting == vertices[i].name)
@@ -316,7 +322,7 @@ int Travel::shortestDistance(std::string starting, std::string destination)
             startFound = true;
         }
     }
- 
+
     for(int i = 0; i < vertices.size(); i++)
     {
         if(destination == vertices[i].name)
@@ -324,19 +330,20 @@ int Travel::shortestDistance(std::string starting, std::string destination)
             destFound = true;
         }
     }
- 
+
+    //If not in the Graph, don't continue
     if(destFound == false || startFound == false)
     {
         cout << "One or more cities not in network" << endl;
         return 0;
     }
- 
- 
+
+
     vertex* start;
     vertex* dest;
- 
+
     vector <vertex*> peth;
- 
+
     for(int i = 0; i < vertices.size(); i++)
     {
         vertices[i].visited = false;
@@ -353,19 +360,22 @@ int Travel::shortestDistance(std::string starting, std::string destination)
             dest = &vertices[i];
         }
     }
- 
- 
- 
+
+
+
     //Different Districts
     //If in different districts: Find the district the other city is in;
     if(dest->districtID != start->districtID)
     {
+        //sets the airport in each district to find travel path between
         vertex* startingAirport = findNearestAirport(starting);
         vertex* destinationAirport = findNearestAirport(destination);
- 
+
         //Travel from starting city to final city
-        //Do shortest distance from starting to airport, airport to airport, airport to destination
+        //Does shortest distance from starting to airport, airport to airport, airport to destination
         //Checks for airport to airport travel
+
+
         if(starting == startingAirport->name && destinationAirport->name == destination)
         {
              totalDistance = totalDistance + travelBetweenDistricts(startingAirport->name, destinationAirport->name);
@@ -376,7 +386,7 @@ int Travel::shortestDistance(std::string starting, std::string destination)
         else if(starting == startingAirport->name)
         {
             totalDistance = totalDistance + travelBetweenDistricts(startingAirport->name, destinationAirport->name);
-        totalDistance = totalDistance + shortestDistance(destinationAirport->name, destination);
+            totalDistance = totalDistance + shortestDistance(destinationAirport->name, destination);
             return totalDistance;
 
         }
@@ -391,30 +401,30 @@ int Travel::shortestDistance(std::string starting, std::string destination)
         else
         {
             totalDistance = totalDistance + shortestDistance(starting, startingAirport->name);
-        totalDistance = totalDistance + travelBetweenDistricts(startingAirport->name, destinationAirport->name);
-        totalDistance = totalDistance + shortestDistance(destinationAirport->name, destination);
-        return totalDistance;
+            totalDistance = totalDistance + travelBetweenDistricts(startingAirport->name, destinationAirport->name);
+            totalDistance = totalDistance + shortestDistance(destinationAirport->name, destination);
+            return totalDistance;
 
         }
-        
+
     }
- 
- 
+
+
     peth.push_back(start);
     int minDistance;
- 
- 
+
+    //
     while(dest->visited == false)
     {
         minDistance = INT_MAX;
         int distance = 0;
         vertex* minVert = NULL;
         vertex* minPrevious;
- 
+
         for(int j = 0; j < peth.size(); j++)
         {
             peth[j]->visited = true;
- 
+
             for( int l = 0; l < peth[j]->adj.size(); l++)
             {
                 if(peth[j]->adj[l].v->visited == false)
@@ -423,7 +433,7 @@ int Travel::shortestDistance(std::string starting, std::string destination)
                     if(distance < minDistance)
                     {
                         peth[j]->adj[l].v->distance = distance;
- 
+
                         minDistance = distance;
                         minVert = peth[j]->adj[l].v;
                         minPrevious = peth[j];
@@ -431,82 +441,130 @@ int Travel::shortestDistance(std::string starting, std::string destination)
                 }
             }
         }
- 
+
         minVert->previous = minPrevious;
         peth.push_back(minVert);
- 
+
     }
- 
+
+
     vector <string> path;
     vertex* destiNation = dest;
- 
+
+    //Stores path
     while(destiNation != NULL)
     {
         path.push_back(destiNation->name);
         destiNation = destiNation->previous;
     }
- 
+
+    //Prints Path
     cout << "Drive from: ";
- 
+
     cout << path[path.size()-1];
     for (int i = path.size()-2; i > -1; i--)
     {
         cout << " to " << path[i];
     }
- 
+
     cout << endl;
- 
+
     return minDistance;
- 
+
 }
- 
-void Travel::findDistricts() //Based on isAirport BOOl
+
+int Travel::travelBetweenDistricts(string starting, string destination)
 {
-    districtIsSet = true;
-    int districtCounter = 1;
-    for(int j = 0; j < vertices.size(); j++)
+    //Djikstra's Algorithm w/ Modifications
+    //Searches through the hubCityVertices vector, to determine shortest path between hub cities
+    vertex* start;
+    vertex* dest;
+
+    vector <vertex*> visitedVertices;
+
+    for(int i = 0; i < hubCityVertices.size(); i++)
     {
-        if(vertices[j].districtID == 0)
+        //Initializes all
+        hubCityVertices[i].visited = false;
+        hubCityVertices[i].previous = NULL;
+        hubCityVertices[i].distance= INT_MAX;
+
+        if (hubCityVertices[i].name == starting)
         {
- 
-            queue <vertex*> quething;
-            vertex v;
-            int i = 0;
-            for(i=0; i<vertices.size();i++)
-                {
-                if (vertices[j].name == vertices[i].name)
-                {
-                    v = vertices[i];
-                    break;
-                }
-            }
-            vertices[i].visited = true;
-            vertices[i].districtID = districtCounter;
-            quething.push(&vertices[i]);
- 
-            while (!quething.empty())
+            hubCityVertices[i].visited = true;
+            hubCityVertices[i].distance = 0;
+            start = &hubCityVertices[i];
+        }
+        else if(hubCityVertices[i].name == destination)
+        {
+            dest = &hubCityVertices[i];
+        }
+
+    }
+
+
+    visitedVertices.push_back(start);
+    int minDistance;
+
+
+    while(dest->visited == false)
+    {
+        minDistance = INT_MAX;
+        int distance = 0;
+        vertex* minVert = NULL;
+        vertex* minPrevious;
+
+        for(int j = 0; j < visitedVertices.size(); j++)
+        {
+            visitedVertices[j]->visited = true;
+
+            for( int l = 0; l < visitedVertices[j]->adj.size(); l++)
             {
-                v = *quething.front();
-                quething.pop();
-                for(i=0;i<v.adj.size();i++) 
+                if(visitedVertices[j]->adj[l].v->visited == false)
                 {
-                    if (v.adj[i].v->visited==false)
+                    distance = visitedVertices[j]->distance + visitedVertices[j]->adj[l].weight;
+                    if(distance < minDistance)
                     {
-                        v.adj[i].v->visited = true;
-                        v.adj[i].v->districtID = districtCounter;
-                        quething.push(v.adj[i].v);
+                        visitedVertices[j]->adj[l].v->distance = distance;
+
+                        minDistance = distance;
+                        minVert = visitedVertices[j]->adj[l].v;
+                        minPrevious = visitedVertices[j];
                     }
                 }
             }
- 
         }
- 
-        if(vertices[j+1].districtID == 0)
-        {
-            districtCounter++;
-        }
- 
+
+        minVert->previous = minPrevious;
+        visitedVertices.push_back(minVert);
+
     }
-    numDistricts = districtCounter;
- 
+
+
+    vector <string> path;
+    vertex* destiNation = dest;
+
+    //Adds path
+    while(destiNation != NULL)
+    {
+        path.push_back(destiNation->name);
+        destiNation = destiNation->previous;
+    }
+
+    travelDistance = minDistance;
+
+    //Prints path
+    cout << "Fly from: ";
+
+    cout << path[path.size()-1];
+    for (int i = path.size()-2; i > -1; i--)
+    {
+        cout << " to " << path[i];
+    }
+
+    cout << endl;
+
+    //returns path distance
+    return minDistance;
+
 }
