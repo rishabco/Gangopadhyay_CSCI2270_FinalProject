@@ -7,6 +7,7 @@
 
 using namespace std;
 
+//Initial menu
 void welcomeMenu()
 {
     cout << "------------------------------" << endl;
@@ -15,15 +16,8 @@ void welcomeMenu()
     cout << "To Begin, ";
 }
 
-void plannerMenu()
-{
-    cout << "" << endl;
-    cout << "   Please make a selection" << endl;
-    cout << "   1. Plan fastest route" << endl;
-    cout << "   2. Plan cheapest route" << endl;
 
-}
-
+//Function to simplify printing the menu out each time
 void printMenu()
 {
     cout <<  "Please Make A Selection" << endl;
@@ -36,6 +30,7 @@ void printMenu()
 
 }
 
+//main loop
 int main()
 {
 
@@ -43,7 +38,7 @@ int main()
     Travel* tGraph = new Travel;
 
     //Read in file
-    //string fileName = argc[1];
+    //string fileName = argc[1];  //If ever need to convert to take in command line arguments
     string fileName = "cities.txt";
     ifstream fn;
     fn.open(fileName);
@@ -53,7 +48,7 @@ int main()
     }
 
 
-    //read in the thing to the vector
+    //Read in line to a vector
     string line;
     int lineCount = 0;
 
@@ -63,7 +58,7 @@ int main()
         vector <string> data;
         int vectIndex = 0;
 
-
+        //Use string stream to add individual info to the vector
         while(ss.good())
         {
             string info;
@@ -73,12 +68,13 @@ int main()
 
         }
             //Read in first line.
+            //First line has names of cities
             if(lineCount == 0)
             {
                 cities = data;
                 for(int i  = 1; i < cities.size(); i++)
                 {
-
+                    //Add the cities to the graph
                     tGraph->addCity(cities[i]);
                     tGraph->addHub(cities[i]);
                 }
@@ -89,15 +85,17 @@ int main()
                 string currentCity = data[0];
                 for(int i = 1; i < cities.size(); i++)
                 {
+                    //Check if there is a connection
                     if(stoi(data[i]) != -1)
                     {
                         if(stoi(data[i])<=1000)
                         {
+                            //If distance is less than 1000 miles points can be reached by car
                             tGraph->addRoad(currentCity, cities[i], stoi(data[i]));
                         }
                         else
                         {
-                            //tGraph->addHub(currentCity);
+                            //If distance is greater than 1000 miles an airplane is required to reach it
                             tGraph->addPlanePath(currentCity, cities[i], stoi(data[i]));
                         }
 
@@ -106,11 +104,14 @@ int main()
                 }
 
             }
+            //Increase the line count.
             lineCount++;
         }
 
+    //Close the file
     fn.close();
 
+    //Establish the districts
     tGraph->findDistricts();
 
     string input;
@@ -119,7 +120,8 @@ int main()
     string startCity;
     string destCity;
 
-     while(input != "5")
+    //main loop
+    while(input != "5")
     {
         printMenu();
         getline(cin, input);
@@ -154,7 +156,7 @@ int main()
         else if(input=="4")
         {
 
-
+                //Get starting city and destination information
                 cout << "Please enter a starting city" << endl;
                 getline(cin, startCity);
                 cout << "Please enter a destination" << endl;
@@ -164,7 +166,8 @@ int main()
                 cout << "Travel Summary" << endl;
                 cout << "------------------------------" << endl;
                 int distanceTraveled = tGraph->shortestDistance(startCity, destCity);
-
+                //Call of function prints out path
+                //Print out total distance traveled
                 cout << "The total distance of your trip is: ";
                 cout <<  distanceTraveled << " miles." << endl;
                 cout << "------------------------------" << endl<<endl;
@@ -174,6 +177,7 @@ int main()
         }
         else if(input =="5")
         {
+            //Ending message
             cout << "Thank you, enjoy your trip!" << endl;
         }
         else
