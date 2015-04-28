@@ -10,9 +10,13 @@ Our project will serve as a trip planner for cities in the United States. The pr
 
 How to Run
 
-When the User starts the program, the program a graph is generated from a .txt file. (We will include a file "cities.txt" as an example)
+When the user starts the program, they pass in the name of a .txt file from which the program's graph will be built. A sample .txt has been provided as an example, it is called cities.txt. The program automatically generates two graphs, one normal graph, with different districts, and one with "hub" cities that contain airports, that allow for movement between districts. 
 
-A menu is then displayed with the following options:
+
+Once the graphs are made, the program begins. 
+
+
+A menu is then displayed and provides the user with the following options:
 
 1. Print All City Options
 2. View Options for Ground Travel
@@ -21,7 +25,17 @@ A menu is then displayed with the following options:
 5. Quit
 
 
+Print All City Options: Displays all cities in the graph, and all of the cities to which they connect. 
+
+View Options for Ground Travel: Prints all districts in the graph by district. 
+
+View Options for Air Travel: Displays all "hub" cities and airports to which they connect.
+
+Begin Planning Trip: Given two cities, this option finds the shortest path between the cities. In situations where the cities are in different districts, another function allows for travel between districts. The total distance is displayed at the end, along with your path, and the type of travel used, plane or car. 
+
 Dependencies
+
+Standard C++ libraries:
 
 Here are the libraries that must be included for this program to function
 Main:
@@ -40,7 +54,8 @@ Travel.cpp
 -   queue
 -   climit
 
-Standard C++ librarries
+
+
 
 Rishab Gangopadhyay, Francesca Figueroa, Kevin Prabhu
 
