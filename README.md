@@ -6,7 +6,7 @@ Project Summary
 
 Our project is a Trip Route Planner. 
 
-Our project will serve as a trip planner for cities in the United States. The program will allow you to input a starting and ending city city and provide information on how to get there. The unique aspect of our program is that there are different districts located across the country. This means, for example, if your starting city and destination are in different cities, the program will inform you how to travel to your nearest "hub city" (where there is an airport), to take a flight from that airport to the next airport, and then directions on how to get from the airport to your destination city. 
+Our project will serve as a travel route planner for cities in the United States. The program will allow you to input a starting and ending city city and provide information on how to get there. The unique aspect of our program is that there are different districts located across the country, to which you can travel. This means, for example, if your starting city and destination are in different cities, the program will inform you how to travel to your nearest "hub city" (where there is an airport), to take a flight from that airport to the next airport, and then directions on how to get from the airport to your destination city. 
 
 How to Run
 
