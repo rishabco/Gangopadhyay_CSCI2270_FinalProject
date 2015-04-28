@@ -248,21 +248,25 @@ tGraph->findDistricts();
 
 Pre-conditions:
 
-Graph should exist, so this should be called after addCity/addHub and addRoad/addPlanePath have been called a few times(once). 
+Must call this function after addCity/addHub and addRoad/addPlanePath have been called, and the graph has been fully generated. 
 
 
 Post Conditions:
 
-All the vertices have districtIDs
+All vertices in the graph will be given districtIDs to identify which part of the graph they are in
 
 */
 void Travel::findDistricts()
-//Sets the districts based on the isAirport Boolean
+//Sets the districts
 {
     districtIsSet = true;
+    //Starts count at 1 for district number
     int districtCounter = 1;
+    
+    //Loops through vertices vector
     for(int j = 0; j < vertices.size(); j++)
     {
+    
         if(vertices[j].districtID == 0)
         {
 
@@ -277,6 +281,8 @@ void Travel::findDistricts()
                     break;
                 }
             }
+            
+            //Sets District
             vertices[i].visited = true;
             vertices[i].districtID = districtCounter;
             districtQueue.push(&vertices[i]);
@@ -663,7 +669,7 @@ int Travel::shortestDistance(std::string starting, std::string destination)
     peth.push_back(start);
     int minDistance;
 
-    //
+    
     while(dest->visited == false)
     {
         minDistance = INT_MAX;
