@@ -15,6 +15,29 @@ Travel::~Travel()
     //dtor
 }
 
+/*
+Function Prototype:
+
+void addCity(std::string);
+
+Function Description:
+
+This function is used to initialize the graph. We pass in the values from the text file one by one into this function to make the graph. First the function checks to see if the city being added is already in the vector; if it is, then the function sets the found boolean to true, so that the city isn't added twice. If the city isn't already in the vector, then it creates a new vertex, sets the name and districtID, then adds it to the vector.
+
+Example:
+Travel tGraph;
+tGraph->addCity(std::string);
+
+Pre-conditions:
+
+The string being passed in must be a string.
+
+
+Post Conditions:
+
+The graph will have vertices.
+
+*/
 void Travel::addCity(std::string cityName)
 //Creates vertices in the vertices vector
 {
@@ -41,6 +64,27 @@ void Travel::addCity(std::string cityName)
 
 }
 
+/*
+Funciton prototype:
+void addHub(std::string);
+
+Function description:
+This function is used to fifnd the "hub" or airport cities. We pass in the values from the text file one by one into this function to make a second graph. First the function checks to see if the city being added is already in the vector; if it is, then the function sets the found boolean to true, so that the city isn't added twice. If the city isn't already in the vector, then it creates a new vertex, sets the name and districtID, then adds it to the vector.
+
+Example:
+Travel tGraph;
+tGraph->addCity(std::string);
+
+Pre-conditions:
+
+The string being passed in must be a string.
+
+
+Post Conditions:
+
+The graph will have vertices.
+
+*/
 void Travel::addHub(std::string cityName)
 //Creates vertices in the hubCityVertices vector
 {
@@ -67,6 +111,27 @@ void Travel::addHub(std::string cityName)
 
 }
 
+/*
+Function Prototype:
+void addRoad(std::string, std::string, int);
+
+Function description:
+This function is used to add edges to the vertices. We pass in the values from the text file. First the function checks where the cities being added are in the vector, then the function adds the edge to the adjacentcy vector.
+
+Example:
+Travel tGraph;
+tGraph->addRoad(std::string, std::string, int);
+
+Pre-conditions:
+
+The strings being passed in must be strings. int must be an int. Function won't do anything if cityOne doesn't exist in the vector.
+
+
+Post Conditions:
+
+The graph will have edges.
+
+*/
 void Travel::addRoad(std::string cityOne, std::string cityTwo, int distance)
 //Adds a "road" path between cities
 {
@@ -90,7 +155,32 @@ void Travel::addRoad(std::string cityOne, std::string cityTwo, int distance)
         }
     }
 }
+/*
+Function prototype:
 
+void addPlanePath(std::string, std::string, int);
+
+
+Function description:
+
+This function is used to add edges to the vertices. We pass in the values from the text file. First the function checks where the cities being added are in the vector, then the function adds the edge to the adjacentcy vector.
+Also sets each city's isAirport boolean to true, so we know which cities are our hub cities.
+
+Example:
+
+Travel tGraph;
+tGraph->addPlanePath(std::string, std::string, int);
+
+Pre-conditions:
+
+The strings being passed in must be strings. int must be an int. Function won't do anything if cityOne doesn't exist in the vector.
+
+
+Post Conditions:
+
+The graph will have edges.
+
+*/
 void Travel::addPlanePath(std::string cityOne, std::string cityTwo, int distance)
 //Adds a path between "hub" cities
 {
@@ -141,6 +231,31 @@ void Travel::addPlanePath(std::string cityOne, std::string cityTwo, int distance
     }
 }
 
+
+/*
+Function prototype:
+
+void findDistricts();
+
+
+Function description:
+
+This function is used to set districtID's for each city in the vertices vector. First it checks to see if the districtID is set, if it hasn't been set it's 0.
+Example:
+
+Travel tGraph;
+tGraph->findDistricts();
+
+Pre-conditions:
+
+Graph should exist, so this should be called after addCity/addHub and addRoad/addPlanePath have been called a few times(once). 
+
+
+Post Conditions:
+
+All the vertices have districtIDs
+
+*/
 void Travel::findDistricts()
 //Sets the districts based on the isAirport Boolean
 {
@@ -155,7 +270,7 @@ void Travel::findDistricts()
             vertex v;
             int i = 0;
             for(i=0; i<vertices.size();i++)
-                {
+            {
                 if (vertices[j].name == vertices[i].name)
                 {
                     v = vertices[i];
@@ -193,6 +308,32 @@ void Travel::findDistricts()
 
 }
 
+/*
+Function prototype:
+
+void printCities();
+
+
+Function description:
+
+This function is used to print all the cities in the vertices vector.
+Just iterates through the vertices vector, printing the name as well as the adjacent vectors to each cities' names.
+
+Example:
+
+Travel tGraph;
+tGraph->printCities();
+
+Pre-conditions:
+
+Graph existing would be nice, otherwise there's nothing to print.
+
+
+Post Conditions:
+
+The graph will be printed.
+
+*/
 void Travel::printCities()
 //Prints out all cities and paths between
 {
@@ -211,6 +352,33 @@ void Travel::printCities()
     }
     cout<< endl;
 }
+
+/*
+Function prototype:
+
+void printDistricts();
+
+
+Function description:
+
+This function is used to print all the cities in the each district.
+Just iterates through the vertices vector, printing the name as well as the adjacent vectors to each cities' names.
+
+Example:
+
+Travel tGraph;
+tGraph->printDistricts();
+
+Pre-conditions:
+
+Graph existing would be nice, also need to run findDistricts before you call this.
+
+
+Post Conditions:
+
+The graph will be printed, seperated by district.
+
+*/
 
 void Travel::printDistricts()
 //Prints out all cities in each district
@@ -238,6 +406,32 @@ void Travel::printDistricts()
     }
 
 }
+/*
+Function prototype:
+
+void printPlanePaths();
+
+
+Function description:
+
+This function is used to print all the cities in the hubCitiyVertices vector.
+Just iterates through the hubCityVertices vector, printing the name as well as the adjacent vectors to each cities' names.
+
+Example:
+
+Travel tGraph;
+tGraph->printPlanePaths();
+
+Pre-conditions:
+
+Graph existing would be nice, otherwise there's nothing to print.
+
+
+Post Conditions:
+
+The hubCity graph will be printed.
+
+*/
 
 void Travel::printPlanePaths()
 //Prints out paths between "hub" cities
@@ -262,6 +456,34 @@ void Travel::printPlanePaths()
     }
 }
 
+/*
+Function prototype:
+
+void findNearestAirport(std::string);
+
+
+Function description:
+
+This function is used to find the nearest hub city to the starting city that is passed in. It checks first to see if the starting city is a hub city, and if that's true then it returns the address of that vertice. If it's not, then it iterates through the vertices looking for the vertex that has a matching districtID & isAirport = true. When it finds that, it returns the address of that vertice.
+
+Example:
+
+Travel tGraph;
+tGraph->findNearestAirport(std::string);
+
+Pre-conditions:
+
+Graph existing would be nice, otherwise there's nothing to search in.
+Strings being passed in must be strings.
+addHubCity needs to be run, or the isAirport bool would not be set.
+Need to run findDistricts, or there's no way to distinguish which hub city is accessible by road.
+
+
+Post Conditions:
+
+The function returns the closest hub city to the entered city, or, if the starting city isn't in the vertices vector, it returns NULL.
+
+*/
 vertex* Travel::findNearestAirport(string startingCity)
 //Finds the airport in a district
 {
@@ -305,6 +527,34 @@ vertex* Travel::findNearestAirport(string startingCity)
 
     return NULL;
 }
+
+/*
+Function prototype:
+
+void shortestDistance(std::string, std::string);
+
+
+Function description:
+
+This function is used to find the shortest path between 2 cities. It uses a modified Djikstra's Algorithm to find the shortest path. The modifications are for the restrictions caused by the districts, as you can only travel between districts from hub cities.
+
+Example:
+
+Travel tGraph;
+tGraph->shortestDistance(std::string, std::string);
+
+Pre-conditions:
+
+Graph existing would be nice, no graph = nothing to figure out what the shortest distance between the 2 cities. 
+strings being passed in must be strings.
+findDistricts needs to be run before as well. This function calls on shortestDistance recursively, as well as findNearestAirport and travelBetweenDistricts.
+
+
+Post Conditions:
+
+The function finds the shortest distance between the 2 cities if they both exist, and prints the air routes, ground routes, and total distance traveled.
+
+*/
 
 int Travel::shortestDistance(std::string starting, std::string destination)
 {
@@ -473,6 +723,32 @@ int Travel::shortestDistance(std::string starting, std::string destination)
 
 }
 
+/*
+Function prototype:
+
+void travelBetweenDistricts(std::string, std::string);
+
+
+Function description:
+
+This function is used to find the shortest path between 2 hub cities. It uses a modified Djikstra's Algorithm to find the shortest path. The modifications are for the restrictions caused by the districts.
+
+Example:
+
+Travel tGraph;
+tGraph->travelBetweenDistricts();
+
+Pre-conditions:
+
+Strings should be strings.
+Graph existing would be nice, otherwise there's nothing to print.
+
+
+Post Conditions:
+
+Returns the int distance between 2 hub cities, the first in the starting district and the second in teh destination district to add to the total distance traveled.
+
+*/
 int Travel::travelBetweenDistricts(string starting, string destination)
 {
     //Djikstra's Algorithm w/ Modifications
