@@ -13,8 +13,10 @@ Our project will serve as a travel route planner for cities in the United States
 How to Run
 
 UPDATE: This Program now runs on terminal. To run go to the cloned repository and enter:
-g++ -std=c++11 *.cpp
-./a.out cities.txt
+ 
+ g++ -std=c++11 *.cpp
+ 
+ ./a.out cities.txt
 
 When the user starts the program, they pass in the name of a .txt file from which the program's graph will be built. A sample .txt has been provided as an example, it is called cities.txt. The program automatically generates two graphs, one normal graph, with different districts, and one with "hub" cities that contain airports, that allow for movement between districts. 
 
