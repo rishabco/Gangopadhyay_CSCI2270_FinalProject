@@ -10,6 +10,8 @@ Our project will serve as a travel route planner for cities in the United States
 
 How to Run
 
+This program is currently designed to be run on CodeBlocks by using the "Build and Run Option". A version where command line arguments are used may be up and running in the near future, at which point this file will be updated.
+
 When the user starts the program, they pass in the name of a .txt file from which the program's graph will be built. A sample .txt has been provided as an example, it is called cities.txt. The program automatically generates two graphs, one normal graph, with different districts, and one with "hub" cities that contain airports, that allow for movement between districts. 
 
 
