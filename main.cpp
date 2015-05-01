@@ -4,6 +4,7 @@
 #include <vector>
 #include <sstream>
 #include "Travel.h"
+#include <string>
 
 using namespace std;
 
@@ -31,15 +32,16 @@ void printMenu()
 }
 
 //main loop
-int main()
+int main(int argc, char*argv[])
 {
 
     vector <string> cities;
     Travel* tGraph = new Travel;
 
     //Read in file
-    //string fileName = argc[1];  //If ever need to convert to take in command line arguments
-    string fileName = "cities.txt";
+
+    string fileName = argv[1];  //If ever need to convert to take in command line arguments
+    //string fileName = "cities.txt";
     ifstream fn;
     fn.open(fileName);
     if (!fn)
